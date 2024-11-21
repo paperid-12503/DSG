@@ -1,0 +1,21 @@
+_base_: "default.yml"
+
+data:
+  batch_size: 128
+  num_words: 1
+  num_workers: 10
+
+model:
+  type: ImageTextCoDecomposition # or ImageDecomposition
+
+  # weight of knowledge-guided loss
+  w_kg: 8.0
+
+  use_region_highlighting_prompt: false
+
+  # CoDe's loss
+  w_hcl: 0.5
+  w_tseg: 1.0
+  w_ce: 2.0
+  use_word_highlighting_prompt: false
+  train_with_bg: true
