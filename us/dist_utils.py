@@ -17,8 +17,6 @@ def dist_info() -> str:
         "GLOBAL_RANK",
         "MASTER_ADDR",
         "MASTER_PORT",
-        # for now, torch.distributed.run env variables
-        # https://github.com/pytorch/pytorch/blob/d69c22dd61/torch/distributed/run.py#L121
         "ROLE_RANK",
         "LOCAL_WORLD_SIZE",
         "WORLD_SIZE",

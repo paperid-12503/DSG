@@ -18,10 +18,6 @@ IMAGENET_DEFAULT_STD = (0.229, 0.224, 0.225)
 DEFAULT_MEAN = IMAGENET_DEFAULT_MEAN
 DEFAULT_STD = IMAGENET_DEFAULT_STD
 
-# NOTE Originally CLIP statistics should be used, but the legacy of ImageNet statistics
-# from GroupViT is applied. Fortunately, CLIP is quite robust to slightly different
-# normalization constants (https://github.com/openai/CLIP/issues/20#issuecomment-764985771).
-
 
 def unnorm(x):
     mean = torch.as_tensor(DEFAULT_MEAN, device=x.device)[None, ..., None, None]
