@@ -1,6 +1,4 @@
 # ------------------------------------------------------------------------------
-# TCL
-# Copyright (c) 2023 Kakao Brain. All Rights Reserved.
 # ------------------------------------------------------------------------------
 from .checkpoint import load_checkpoint, save_checkpoint, CheckpointManager
 from .config import get_config, load_config

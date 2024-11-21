@@ -1,9 +1,4 @@
 # ------------------------------------------------------------------------------
-# CoDe
-# Copyright (C) 2024 by Ji-Jia Wu. All Rights Reserved.
-# ------------------------------------------------------------------------------
-# Modified from TCL (https://github.com/kakaobrain/tcl)
-# Copyright (c) 2023 Kakao Brain. All Rights Reserved.
 # ------------------------------------------------------------------------------
 import argparse
 import datetime
@@ -404,7 +399,6 @@ def main():
     else:
         cfg = get_config(args)
 
-    # start faster ref: https://github.com/open-mmlab/mmdetection/pull/7036
     mp.set_start_method("fork", force=True)
     init_dist("pytorch")
     rank, world_size = get_dist_info()

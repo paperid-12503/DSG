@@ -1,6 +1,4 @@
 # ------------------------------------------------------------------------------
-# TCL
-# Copyright (c) 2023 Kakao Brain. All Rights Reserved.
 # ------------------------------------------------------------------------------
 from typing import Dict, List, Any
 from datetime import datetime
