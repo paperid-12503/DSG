@@ -1,1 +1,0 @@
-我们提供了训练的完整代码以及Dual Semantic Guidance Generation的核心组件（Region Awarness Attention）供审查。我们将在未来公开完整代码与训练数据。
