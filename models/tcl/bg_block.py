@@ -6,7 +6,8 @@ from einops.layers.torch import Rearrange
 import torch.nn.functional as F
 
 class Mlp(nn.Module):
-    """ MLP as used in Vision Transformer, MLP-Mixer and related networks
+    """ 
+    MLP as used in Vision Transformer, MLP-Mixer and related networks
     """
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
         super().__init__()
@@ -65,7 +66,7 @@ class AttentionLayer(nn.Module):
         Z = 1 / (torch.einsum("nlhd,nhd->nlh", Q, K.sum(dim=1)) + self.eps)
         queried_values = torch.einsum("nlhd,nhdv,nlh->nlhv", Q, KV, Z) * v_length
 
-        out = queried_values.contiguous().mean(dim=1) #这里是mean
+        out = queried_values.contiguous().mean(dim=1)
         out = rearrange(out, 'B H D -> B (H D)')
         out = rearrange(out, '(B H W) C -> B H W C', B=B, H=H, W=W)
         return out

@@ -49,7 +49,7 @@ class ImageTextCoDecomposition(ImageDecomposition):
         q_embeddings = category.permute(1, 0, 2).reshape(b*n, -1) # <b, n, dim>
         ret = {}  
 
-        if not text:
+        if not text[0]:
             embs = self.patch_image_embedding(image, category, mask_gt)
             embs = embs['emb_type'].permute(1, 0, 2).reshape(b*n, -1)
 

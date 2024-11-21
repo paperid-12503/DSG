@@ -72,10 +72,6 @@ train:
   total_steps: 30000
   warmup_steps: 0
   ust_steps: 0
-  # total_steps: 50000
-  # warmup_steps: 15000
-  # ust_steps: 30000
-  # base_lr: 6e-4 
   base_lr: 6.4e-4
   # base_lr: 4e-4 
   weight_decay: 0.05

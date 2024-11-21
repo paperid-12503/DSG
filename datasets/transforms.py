@@ -60,15 +60,13 @@ class Normalize:
         return sample
 
 class ColorJitter:  
-    def __init__(self, prob=0.4, brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1):  
-        # 初始化ColorJitter  
+    def __init__(self, prob=0.4, brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1):   
         self.color_jitter = T.ColorJitter(brightness=brightness,  
                                                 contrast=contrast,  
                                                 saturation=saturation,  
                                                 hue=hue) 
         self.prob = prob 
     def __call__(self, sample):  
-        # 应用ColorJitter  
         if random.random() < self.prob:
             sample['image'] = self.color_jitter(sample['image'])  
           

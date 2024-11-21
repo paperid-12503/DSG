@@ -1,9 +1,4 @@
 # ------------------------------------------------------------------------------
-# CoDe
-# Copyright (C) 2024 by Ji-Jia Wu. All Rights Reserved.
-# ------------------------------------------------------------------------------
-# Modified from TCL (https://github.com/kakaobrain/tcl)
-# Copyright (c) 2023 Kakao Brain. All Rights Reserved.
 # ------------------------------------------------------------------------------
 import os.path as osp
 import random
@@ -43,19 +38,18 @@ def collate(data):
     data_new = []
     for sample in data:
         assert sample["mask"].shape[0] >= 2
-        index = [random.randint(0, sample["mask"].shape[0]-1) for _ in range(2)]
+        index = [random.randint(0, sample["mask"].shape[0]-1) for _ in range(1)]
         while index[0] == index[1]:
-            index = [random.randint(0, sample["mask"].shape[0]-1) for _ in range(2)]
-        # -1代表的是不作加强的embedding
+            index = [random.randint(0, sample["mask"].shape[0]-1) for _ in range(1)]
         selected_num = random.randint(0, 1)
         category = (sample['category'][index, selected_num, :] + sample['category'][index, -1, :]) / 2
         # category = sample['category'][index, :]
-        text = [sample['text'][index[0]], sample['text'][index[1]]]
-        data_new.append((sample['image'], category, sample['mask'][index, :], text))
+        is_text = (sample['is_text'][index[0]] == "True") # true / false
+        data_new.append((sample['image'], category, sample['mask'][index, :], is_text))
 
     # data = [(sample['image'], sample['category'], sample['mask']) for sample in data]
     output = torch_default_collate(data_new)
-    image, category, mask, text = output
+    image, category, mask, is_text = output
     # image:    <B, 3, 224, 224>
     # category: <B, 5, 512>
     # mask:     <B, 5, 224, 224>
@@ -64,7 +58,7 @@ def collate(data):
         "image": image,
         "category": category,
         "mask_gt": mask,
-        "text": text,
+        "text": is_text,
     }
 
 
@@ -120,7 +114,6 @@ def img_json_npz_decoder(key, value):
         masks = np.load(io.BytesIO(value))['masks']
         per_numclass = masks.shape[0]
         if per_numclass < 2:
-            # print("yes")
             raise NounNotEnoughError()
         return masks
     elif key.endswith(".npy"):
@@ -166,7 +159,7 @@ def build_dataset(config):
 
     dataset = (
         wds.WebDataset(tar_file_list, repeat=True, handler=warn_and_continue)
-        .shuffle(40000)  # datapoint-level shuffle
+        .shuffle(40000)
         .decode(img_json_npz_decoder, handler=warn_and_continue)
         .rename(
             image="jpg",

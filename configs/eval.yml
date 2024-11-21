@@ -1,6 +1,6 @@
 evaluate:
   pamr: false
-  bg_thresh: 0.32
+  bg_thresh: 0.35
   kp_w: 0.4
 
   eval_only: true

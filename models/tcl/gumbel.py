@@ -1,17 +1,10 @@
 # ------------------------------------------------------------------------------
-# TCL
-# Copyright (c) 2023 Kakao Brain. All Rights Reserved.
 # ------------------------------------------------------------------------------
 import torch
 
 
 def gumbel_sigmoid(logits: torch.Tensor, tau:float = 1, hard: bool = False):
-    """Samples from the Gumbel-Sigmoid distribution and optionally discretizes.
-
-    References:
-        - https://github.com/yandexdataschool/gumbel_dpg/blob/master/gumbel.py
-        - https://pytorch.org/docs/stable/_modules/torch/nn/functional.html#gumbel_softmax
-
+    """
     Note:
         X - Y ~ Logistic(0,1) s.t. X, Y ~ Gumbel(0, 1).
         That is, we can implement gumbel_sigmoid using Logistic distribution.
