@@ -123,13 +123,13 @@ class ImageTextCoDecomposition(ImageDecomposition):
             mask_gt_14 = F.interpolate(mask_gt, size=frozen_embedding.shape[-2:], mode='nearest').unsqueeze(dim=2)
             zeros = mask_gt_14.sum(dim=(2,3,4))
 
-            emb_type1 = (frozen_embedding * mask_gt_14).sum(dim=(3, 4)) / (mask_gt_14.sum(dim=(3, 4)) + self.eps)
-            emb_type1[zeros==0, :] = category[zeros==0, :].float()
-            emb_type1 = emb_type1 / emb_type1.norm(dim=-1, keepdim=True)
+            # emb_type1 = (frozen_embedding * mask_gt_14).sum(dim=(3, 4)) / (mask_gt_14.sum(dim=(3, 4)) + self.eps)
+            # emb_type1[zeros==0, :] = category[zeros==0, :].float()
+            # emb_type1 = emb_type1 / emb_type1.norm(dim=-1, keepdim=True)
 
             
-            # emb_copy = (frozen_embedding * mask_gt_14).view(B, n, 512, -1)
-            # similarity = torch.einsum('bncx,bnc->bnx', emb_copy, category)  # (64, 2, 196)
+            emb_copy = (frozen_embedding * mask_gt_14).view(B, n, 512, -1)
+            similarity = torch.einsum('bncx,bnc->bnx', emb_copy, category)  # (64, 2, 196)
             # _, topk_indices = torch.topk(similarity, self.topk, dim=-1)  # (64, 2, topk)
             # emb_type2 = torch.gather(emb_copy, 3, topk_indices.unsqueeze(2).expand(-1, -1, 512, -1))  # (64, 2, 512, topk)
             # emb_type2[zeros < self.topk, :, :] = category[zeros < self.topk, :].unsqueeze(dim=-1).repeat(1, 1, self.topk).half()
@@ -137,16 +137,16 @@ class ImageTextCoDecomposition(ImageDecomposition):
             # emb_type2 = emb_type2 / emb_type2.norm(dim=-1, keepdim=True)
 
             
-            # similarity_sum = similarity.sum(dim=-1, keepdim=True)
-            # weight = similarity / (similarity_sum + self.eps)      
-            # emb_type3 = torch.einsum("bncx,bnx->bnc", emb_copy, weight)  
-            # emb_type3[zeros==0, :] = category[zeros==0, :].half()
-            # emb_type3 = emb_type3 / emb_type3.norm(dim=-1, keepdim=True)
+            similarity_sum = similarity.sum(dim=-1, keepdim=True)
+            weight = similarity / (similarity_sum + self.eps)      
+            emb_type3 = torch.einsum("bncx,bnx->bnc", emb_copy, weight)  
+            emb_type3[zeros==0, :] = category[zeros==0, :].half()
+            emb_type3 = emb_type3 / emb_type3.norm(dim=-1, keepdim=True)
 
             # emb_typeall = emb_type2 + emb_type3
             # emb_typeall = emb_typeall / emb_typeall.norm(dim=-1, keepdim=True)
 
-        emb = {"emb_type": emb_type1}
+        emb = {"emb_type": emb_type3}
         # emb = {"emb_type1": emb_type1.half(), "emb_type2": emb_type2, "emb_type3": emb_type3}
         return emb
     
